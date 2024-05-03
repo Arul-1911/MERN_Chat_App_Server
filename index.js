@@ -1,11 +1,15 @@
+//IMPORTS
 const express = require('express');
 const { chats } = require('./Data/ChatData.js');
 const dotenv = require('dotenv').config();
 const cors = require('cors');
 const connectDB = require('./Config/DB.js');
+const userRoutes = require('./Routes/userRoute.js');
+const { notFound, errorHandler } = require('./Middlewares/errorMiddleware.js');
 
 //MIDDELEWARES
 const app = express();
+app.use(express.json()) //TO ACCEPT JSON DATA
 app.use(cors());
 connectDB();
 
@@ -14,16 +18,13 @@ app.get('/',(req,res) => {
    res.send('sample check of api')
 })
 
-app.get('/api/chat', (req,res) => {
-   res.send(chats)
-})
+//USERROUTES
+app.use('/api/user', userRoutes)
 
-app.get('/api/chat/:id', (req,res) => {
-   // console.log(req.params.id);
-   const singleid = chats.find((e) => e._id === req.params.id);
-   res.send(singleid)
-})
+app.use(notFound)
+app.use(errorHandler)
 
+
+// SERVER CONNECTION
 const PORT = process.env.PORT || 8080
-
 app.listen(PORT, console.log(`server running in port: ${PORT}`))
