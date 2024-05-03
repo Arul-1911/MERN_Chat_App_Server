@@ -1,11 +1,13 @@
 const express = require('express');
 const { chats } = require('./Data/ChatData.js');
 const dotenv = require('dotenv').config();
-const cors = require('cors')
+const cors = require('cors');
+const connectDB = require('./Config/DB.js');
 
 //MIDDELEWARES
 const app = express();
 app.use(cors());
+connectDB();
 
 
 app.get('/',(req,res) => {
