@@ -20,7 +20,7 @@ const registerUser = asyncHandler(async (req, res) => {
     return res.status(400).json({ error: "Email already exists" });
   }
 
-  //CREATE NEW USER
+  //CREATING NEW USER
   const user = await User.create({
     userName,
     email,
