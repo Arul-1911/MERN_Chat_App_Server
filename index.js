@@ -13,7 +13,7 @@ app.use(express.json()) //TO ACCEPT JSON DATA
 app.use(cors());
 connectDB();
 
-//SAMPLE
+//SAMPLE ROUTE
 app.get('/',(req,res) => {
    res.send('sample check of api')
 })
