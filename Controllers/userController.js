@@ -29,12 +29,12 @@ const registerUser = asyncHandler(async (req, res) => {
   });
 
   if (user) {
-   return res.status(201).json({
+    return res.status(201).json({
       _id: user._id,
       userName: user.userName,
       email: user.email,
       pic: user.pic,
-      token:genrerateToken(user._id)
+      token: genrerateToken(user._id),
     });
   } else {
     return res.status(401).json({ error: "failed to create user" });
@@ -60,5 +60,24 @@ const authUser = asyncHandler(async (req, res) => {
   }
 });
 
+//GET ALL USERS
 
-module.exports = { registerUser, authUser };
+const allUsers = asyncHandler(async (req, res) => {
+  const keyword = req.query.search
+    ? {
+        $or: [
+          {
+            userName: { $regex: req.query.search, $options: "i" },
+          },
+          {
+            email: { $regex: req.query.search, $options: "i" },
+          },
+        ],
+      }
+    : null;
+
+  const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
+  res.send(users)
+});
+
+module.exports = { registerUser, authUser, allUsers };
